@@ -15,6 +15,13 @@ module.exports = {
         target: 'http://192.168.100.218:40000/api2/', // http://192.168.100.18:51116, http://192.168.100.166:51116/api1/
         pathRewrite: { "^/api2": "" },
         logLevel: 'debug'
+      },
+      '/lts': {
+        target: 'http://hx.dev.ybjfu.com/lts/',
+        // target: 'http://192.168.200.27/lts/',
+        pathRewrite: { '^/lts': '' },
+        changeOrigin: true,
+        logLevel: 'debug'
       }
     },
     // Various Dev Server settings

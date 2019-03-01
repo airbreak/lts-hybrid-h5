@@ -26,7 +26,7 @@ export default (url = '', data = {}, type = 'POST', responseType) => {
     baseURL: process.env.NODE_ENV === 'development' ? '' : window.APIPATH,
     timeout: 60 * 2 * 1000,
     method: type,
-    url: '/api2' + url
+    url: url
   }
 
   if (/^post|put|patch$/i.test(type)) {
