@@ -123,7 +123,8 @@ export default {
       rewardAmountBoxFlag: false,
       amountArr: [10, 20, 50, 66, 88, 100],
       inputAmount: '',
-      amountSelected: 10
+      amountSelected: 10,
+      deviceType: null
     }
   },
   created () {
@@ -167,12 +168,27 @@ export default {
         if (typeof window.androidApp !== 'undefined') {
           switch (rewardInfo.payType) {
             case 'alipay':
-              alert('向app发送支付支付宝支付信息：' + str)
+              alert('向android app发送支付支付宝支付信息：' + str)
               window.androidApp.aliPay(str)
               break
             case 'wx':
-              alert('向app发送支付支付宝支付信息：' + str)
+              alert('向android app发送微信支付信息：' + str)
               window.androidApp.wxPay(str)
+              break
+            default:
+              break
+          }
+        }
+      } else {
+        if (typeof window.iosApp !== 'undefined') {
+          switch (rewardInfo.payType) {
+            case 'alipay':
+              alert('向ios app发送支付支付宝支付信息：' + str)
+              window.iosApp.aliPay(str)
+              break
+            case 'wx':
+              alert('向ios app发送微信支付信息：' + str)
+              window.iosApp.wxPay(str)
               break
             default:
               break
@@ -214,40 +230,43 @@ export default {
     },
     // 调用app的方法获取token
     getTokenFromApp () {
-      let deviceType = operationType()
-      let token = sessionStorage.getItem('token')
-      // token = 'RjVCQTMyRDAyODQwNjI1RUMyREI3NkM2Njk2QjI5RTgzRkUxMDFFOTRDOURGMUI2NENCN0JCMzI0RUNFNTkxNjE3NTYzOUQ5NDg1NjNFOTdCM0RBQjRCNkRGQjkyQ0RFQUFFODk3QzMwOTA0REFGMzYxRDAzQkI4OERDREQyOUU0RDEyQ0YxMjc0MjMxQjFDNUU0MzFCNUFGQzJCRkE3RkFEREE4NEQ1MzQ4NEI5MDdDRUZEMzBBRDBGN0Q1RDUyRkIyMzlCMUJDRTQwNEUyQkU3QkQ2NTI5MDQzRDkxNUZDRjBBMzA5NzgxNzQxMjEzM0MyMDVGMzgxOTFCNDA5Rg=='
+      this.deviceType = operationType()
+      let token = null
+      // token = 'RjVCQTMyRDAyODQwNjI1RUMyREI3NkM2Njk2QjI5RThCQjQxRDQ3QUM3MTBDMTZGQUUyN0RERjU3QzcwMUQ2MTFGNkZCOTdCNzgxOTQ3NzBEQkQxRUYxRDZBNkFFOThDQUFFODk3QzMwOTA0REFGMzYxRDAzQkI4OERDREQyOUU0RDEyQ0YxMjc0MjMxQjFDNUU0MzFCNUFGQzJCRkE3RkFEREE4NEQ1MzQ4NEI5MDdDRUZEMzBBRDBGN0Q1RDUyRkIyMzlCMUJDRTQwNEUyQkU3QkQ2NTI5MDQzRDkxNUZDRjBBMzA5NzgxNzQxMjEzM0MyMDVGMzgxOTFCNDA5Rg===='
       // if (!token) {
-      if (deviceType.mobile) {
-        if (deviceType.android) {
+      if (this.deviceType.mobile) {
+        if (this.deviceType.android) {
           if (typeof window.androidApp !== 'undefined') {
             token = window.androidApp.getToken()
             alert('安卓端获取到的token为' + token)
+            cookie.set('device_id', token)
+            sessionStorage.setItem('token', token)
+            this.getData()
           }
         } else {
           setTimeout(() => {
-            // if (typeof window.iosApp === 'undefined') {
-            //   alert('ios端app 不存在')
-            // }
-            // if (typeof iosApp === 'undefined') {
-            //   alert('ios端app 不存在')
-            // }
-            token = window.iosApp.getToken()
+            if (typeof window.iosApp !== 'undefined') {
+              token = window.iosApp.getToken()
+            }
           }, 500)
         }
+      } else {
+        token = 'RjVCQTMyRDAyODQwNjI1RUMyREI3NkM2Njk2QjI5RThCQjQxRDQ3QUM3MTBDMTZGQUUyN0RERjU3QzcwMUQ2MTFGNkZCOTdCNzgxOTQ3NzBEQkQxRUYxRDZBNkFFOThDQUFFODk3QzMwOTA0REFGMzYxRDAzQkI4OERDREQyOUU0RDEyQ0YxMjc0MjMxQjFDNUU0MzFCNUFGQzJCRkE3RkFEREE4NEQ1MzQ4NEI5MDdDRUZEMzBBRDBGN0Q1RDUyRkIyMzlCMUJDRTQwNEUyQkU3QkQ2NTI5MDQzRDkxNUZDRjBBMzA5NzgxNzQxMjEzM0MyMDVGMzgxOTFCNDA5Rg===='
+        this.getData()
       }
-      // }
-      cookie.set('device_id', token)
-      sessionStorage.setItem('token', token)
-      // this.$store.dispatch('getUserInfo')
-      this.getData()
     },
     initRewardedFn () {
-      window.rewarded = () => {
-        alert('ok')
+      window.rewardSuccess = () => {
+        alert('支付成功')
+      }
+      window.rewardFail = (res) => {
+        alert('支付失败' + res)
       }
       window.receiveTokenFromIOS = (token) => {
         alert(`token: ${token}`)
+        cookie.set('device_id', token)
+        sessionStorage.setItem('token', token)
+        this.getData()
       }
     }
   }

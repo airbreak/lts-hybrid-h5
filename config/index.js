@@ -11,9 +11,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api2': {
-        target: 'http://192.168.100.218:40000/api2/', // http://192.168.100.18:51116, http://192.168.100.166:51116/api1/
-        pathRewrite: { "^/api2": "" },
+      '/ucapi': {
+        target: 'http://hx.dev.ybjfu.com/ucapi',
+        pathRewrite: { '^/ucapi': '' },
+        changeOrigin: true,
         logLevel: 'debug'
       },
       '/lts': {
