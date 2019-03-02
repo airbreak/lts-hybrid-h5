@@ -101,6 +101,7 @@ import { dateFormat } from '@/utils/date'
 import cookie from '@/utils/cookie'
 import { operationType } from '@/utils/assist'
 import { Toast } from 'mint-ui'
+import { setToken } from '@/utils/auth'
 export default {
   name: 'index',
   data () {
@@ -252,6 +253,7 @@ export default {
         }
       } else {
         token = 'RjVCQTMyRDAyODQwNjI1RUMyREI3NkM2Njk2QjI5RThCQjQxRDQ3QUM3MTBDMTZGQUUyN0RERjU3QzcwMUQ2MTFGNkZCOTdCNzgxOTQ3NzBEQkQxRUYxRDZBNkFFOThDQUFFODk3QzMwOTA0REFGMzYxRDAzQkI4OERDREQyOUU0RDEyQ0YxMjc0MjMxQjFDNUU0MzFCNUFGQzJCRkE3RkFEREE4NEQ1MzQ4NEI5MDdDRUZEMzBBRDBGN0Q1RDUyRkIyMzlCMUJDRTQwNEUyQkU3QkQ2NTI5MDQzRDkxNUZDRjBBMzA5NzgxNzQxMjEzM0MyMDVGMzgxOTFCNDA5Rg===='
+        setToken(token)
         this.getData()
       }
     },

@@ -1,9 +1,10 @@
+import { getToken } from '@/utils/auth'
 import axios from 'axios'
 import Qs from 'qs'
 
 // request interceptor
 axios.interceptors.request.use(config => {
-  // config.headers['accessToken'] = getToken()
+  config.headers['accessToken'] = getToken()
   return config
 }, error => {
   // Do something with request error
